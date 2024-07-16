@@ -1,0 +1,209 @@
+<main>
+  <div
+    class="container d-flex justify-content-center align-items-center min-vh-100"
+  >
+    <div class="row border rounded-5 p-2 bg-white shadow box-area">
+      <div class="col">
+        <img
+          src="../../../assets/images/image1.jpg"
+          alt="login"
+          class="img-fluid rounded-2"
+        />
+      </div>
+
+      <div class="col-md-6 right-box">
+        <div class="row align-items-center">
+          <div class="d-flex align-items-center justify-content-center mb-1">
+            <h3>🏥 AppointmentSystem</h3>
+          </div>
+          @if(showLoginForm){
+          <form
+            [formGroup]="loginForm"
+            (ngSubmit)="onSubmitLogin()"
+            autocomplete="off"
+            novalidate
+          >
+            <div class="form-group">
+              <label for="inputLogin">Login</label>
+              <input
+                type="text"
+                name="inputLogin"
+                id="inputLogin"
+                class="form-control"
+                placeholder="Login do usuário"
+                formControlName="login"
+              />
+              <app-input-validation
+                [control]="loginForm.controls.login"
+              ></app-input-validation>
+            </div>
+            <div class="form-group">
+              <label for="inputPassword" class=" ">Senha</label>
+              <input
+                type="password"
+                name="inputPassword"
+                id="inputPassword"
+                class="form-control"
+                placeholder="***********"
+                formControlName="password"
+              />
+              <app-input-validation
+                [control]="loginForm.controls.password"
+              ></app-input-validation>
+            </div>
+            <button
+              name="loginButton"
+              class="btn btn-primary btn-block mb-4"
+              id="loginButton"
+            >
+              Login
+            </button>
+            <div class="row">
+              <span
+                class="text-danger"
+                [class]="wrongCredentials ? 'visible' : 'invisible'"
+              >
+                Usuário ou senha inválidos
+              </span>
+            </div>
+            <div class="row">
+              <small>
+                Não tem uma conta?
+                <button
+                  (click)="changeForm()"
+                  type="button"
+                  class="btn btn-link"
+                >
+                  cadastre-se
+                </button>
+              </small>
+            </div>
+          </form>
+          } @else {
+          <form
+            [formGroup]="registerForm"
+            (ngSubmit)="onSubmitRegister()"
+            autocomplete="off"
+            novalidate
+          >
+            <div class="form-group">
+              <label for="inputLoginRegister" class=" ">Login</label>
+              <input
+                type="text"
+                name="inputLoginRegister"
+                id="inputLoginRegister"
+                class="form-control"
+                placeholder="Login do usuário"
+                formControlName="login"
+              />
+              <app-input-validation
+                [control]="registerForm.controls.login"
+              ></app-input-validation>
+            </div>
+            <div class="form-group">
+              <label for="inputNameRegister" class=" ">Nome</label>
+              <input
+                type="text"
+                name="inputNameRegister"
+                id="inputNameRegister"
+                class="form-control"
+                placeholder="Nome do usuário"
+                formControlName="name"
+              />
+              <app-input-validation
+                [control]="registerForm.controls.name"
+              ></app-input-validation>
+            </div>
+            <div class="form-group">
+              <label for="inputDBirthRegister" class=" "
+                >Data de nascimento</label
+              >
+              <input
+                type="date"
+                name="inputDBirthRegister"
+                id="inputDBirthRegister"
+                class="form-control"
+                placeholder="Data de nascimento"
+                formControlName="dateOfBirth"
+              />
+              <app-input-validation
+                [control]="registerForm.controls.dateOfBirth"
+              ></app-input-validation>
+            </div>
+            <div class="form-group">
+              <label for="inputPasswordRegister" class=" ">Senha</label>
+              <input
+                type="password"
+                name="inputPasswordRegister"
+                id="inputPasswordRegister"
+                class="form-control"
+                placeholder="***********"
+                formControlName="password"
+              />
+              <app-input-validation
+                [control]="registerForm.controls.password"
+              ></app-input-validation>
+            </div>
+            <div class="form-group">
+              <label for="inputPasswordConfRegister" class=" "
+                >Confirmação de senha</label
+              >
+              <input
+                type="password"
+                name="inputPasswordConfRegister"
+                id="inputPasswordConfRegister"
+                class="form-control"
+                placeholder="***********"
+                formControlName="passwordConfirmation"
+              />
+              <app-input-validation
+                [control]="registerForm.controls.passwordConfirmation"
+              ></app-input-validation>
+              @if(registerForm.errors?.["mismatch"]){
+              <span> Senhas não batem </span>
+              }
+            </div>
+            <div class="form-group">
+              <label for="selectProfileRegister" class=" "
+                >Perfil do usuário</label
+              >
+              <select
+                id="selectProfileRegister"
+                name="selectProfileRegister"
+                class="form-select"
+                aria-label="Default select example"
+                formControlName="profile"
+              >
+                <option value="1">Paciente</option>
+                <option value="2">Profissional</option>
+              </select>
+              <app-input-validation
+                [control]="registerForm.controls.profile"
+              ></app-input-validation>
+            </div>
+            <button
+              name="registerButton"
+              class="btn btn-primary btn-block mb-4"
+              id="registerButton"
+            >
+              Registrar
+            </button>
+            <div class="row">
+              <small>
+                Possui uma conta?
+                <button
+                  type="button"
+                  (click)="changeForm()"
+                  class="btn btn-link"
+                >
+                  logar
+                </button>
+              </small>
+            </div>
+          </form>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
