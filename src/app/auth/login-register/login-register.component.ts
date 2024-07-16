@@ -10,6 +10,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { InputValidationComponent } from '../../shared/components/input-validation/input-validation.component';
+import { Login, Register } from '../../core/types/formTypes';
+import { AuthService } from '../../core/services/auth.service';
 
 const matchPassword: ValidatorFn = (
   control: AbstractControl
@@ -29,12 +31,14 @@ const matchPassword: ValidatorFn = (
 @Component({
   selector: 'app-login-register',
   standalone: true,
-  imports: [ReactiveFormsModule, InputValidationComponent],
+  imports: [ReactiveFormsModule, InputValidationComponent,],
   templateUrl: './login-register.component.html',
   styleUrl: './login-register.component.scss',
 })
 export class LoginRegisterComponent {
-  constructor(private formBuilderService: FormBuilder) {}
+  constructor(private formBuilderService: FormBuilder, private authService: AuthService) {
+
+  }
 
   loginForm = this.formBuilderService.group({
     login: ['', [Validators.required, Validators.minLength(4)]],
@@ -45,7 +49,7 @@ export class LoginRegisterComponent {
     {
       name: ['', Validators.required],
       login: ['', Validators.required],
-      profile: ['1', Validators.required],
+      profile: [1, Validators.required],
       password: ['', Validators.required],
       passwordConfirmation: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
@@ -59,16 +63,42 @@ export class LoginRegisterComponent {
   showLoginForm: boolean = true;
 
   onSubmitLogin() {
+
     if (this.loginForm.valid) {
-      //logica do login aqui
+      this.authService.onLogin(this.loginForm.value as Login).subscribe({
+        next: () => {},
+        error: () => {
+          this.wrongCredentials = true;
+        },
+      });
     } else {
       this.loginForm.markAllAsTouched();
     }
   }
 
   onSubmitRegister() {
+
     if (this.registerForm.valid) {
-      //logica do register aqui
+      const registerData: Register = {
+        name: this.registerForm.controls.name.value!,
+        login: this.registerForm.controls.login.value!,
+        password: this.registerForm.controls.password.value!,
+        profile: this.registerForm.controls.profile.value!,
+        dateOfBirth: new Date(this.registerForm.controls.dateOfBirth.value!).toISOString()
+      }
+
+      this.authService
+        .onRegister(registerData)
+        .subscribe({
+          next: () => {
+            console.log('deu bom o cadastro');
+            this.changeForm();
+          },
+          error: () => {
+            this.wrongCredentials = true;
+          },
+        });
+        
     } else {
       this.registerForm.markAllAsTouched();
     }
