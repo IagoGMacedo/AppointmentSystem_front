@@ -7,9 +7,15 @@ import { User } from '../types/userTypes';
   providedIn: 'root',
 })
 export class TokenService {
+
   isAuthentication: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
+
+  loggedUser : BehaviorSubject<User|null> = new BehaviorSubject<User|null>(
+    null
+  );
+
   constructor() {
     const token = this.getToken();
     if (token) {
@@ -23,6 +29,7 @@ export class TokenService {
 
   setToken(token: string) {
     this.updateToken(true);
+    this.loggedUser.next(this.extractToken(token));
     localStorage.setItem(constants.CURRENT_TOKEN, token);
   }
 
@@ -55,6 +62,24 @@ export class TokenService {
       };
     }
     return null;
+  }
+
+  extractToken(token : string) : User{
+    let jsonContent = JSON.parse(atob(token.split('.')[1]));
+      //return jsonContent as IUser; assim seria o melhor jeito?
+      return {
+        id: jsonContent[
+          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid'
+        ],
+        name: jsonContent[
+          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'
+        ],
+        profile:
+          jsonContent[
+            'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+          ],
+        login: jsonContent.login,
+      };
   }
   
 }

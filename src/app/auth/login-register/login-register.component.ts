@@ -83,7 +83,7 @@ export class LoginRegisterComponent {
         name: this.registerForm.controls.name.value!,
         login: this.registerForm.controls.login.value!,
         password: this.registerForm.controls.password.value!,
-        profile: this.registerForm.controls.profile.value!,
+        profile: Number(this.registerForm.controls.profile.value!),
         dateOfBirth: new Date(this.registerForm.controls.dateOfBirth.value!).toISOString()
       }
 
@@ -92,6 +92,7 @@ export class LoginRegisterComponent {
         .subscribe({
           next: () => {
             console.log('deu bom o cadastro');
+            this.registerForm.reset()
             this.changeForm();
           },
           error: () => {

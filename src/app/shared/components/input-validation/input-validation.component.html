@@ -4,5 +4,10 @@
   matTooltip="{{ mostrarMensagens() }}"
   matTooltipPosition="after"
 >
-  campo inválido
+  @if (mostrarErros()) {
+    {{mostrarMensagens()}}
+  } 
+  @else{
+    vazio
+  }
 </span>

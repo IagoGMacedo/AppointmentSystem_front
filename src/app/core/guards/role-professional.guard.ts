@@ -14,5 +14,6 @@ export const roleProfessionalGuard: CanActivateFn = (route, state) => {
       return true;
     }
   }
+  console.log("deu false");
   return false; 
 };

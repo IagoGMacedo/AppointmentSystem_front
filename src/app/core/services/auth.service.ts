@@ -42,6 +42,7 @@ export class AuthService {
   }
 
   onRegister(data: Register) {
+    console.log("chegando pra registrar")
     console.log(data);
     return this.http
       .post<RegisterResponse>(`${apiEndpoint.AuthEndpoint.register}`, data)

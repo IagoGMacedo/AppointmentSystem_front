@@ -8,11 +8,12 @@ export const rolePatientGuard: CanActivateFn = (route, state) => {
 
   const user : User | null = tokenService.getLoggedUser();
   console.log("entrei no patient role guard")
-
+  console.log(user);
   if(user){
     if(user.profile === 'Patient'){
       return true;
     }
   }
+  console.log("deu false");
   return false; 
 };
