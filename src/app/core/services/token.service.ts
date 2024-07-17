@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { constants } from '../constants/constants';
+import { User } from '../types/userTypes';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,28 @@ export class TokenService {
   removeToken() {
     this.updateToken(false);
     localStorage.removeItem(constants.CURRENT_TOKEN);
+  }
+
+  getLoggedUser(): User | null {
+    let token: string | null = localStorage.getItem(constants.CURRENT_TOKEN);
+    if (token) {
+      let jsonContent = JSON.parse(atob(token.split('.')[1]));
+      //return jsonContent as IUser; assim seria o melhor jeito?
+      return {
+        id: jsonContent[
+          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid'
+        ],
+        name: jsonContent[
+          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'
+        ],
+        profile:
+          jsonContent[
+            'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+          ],
+        login: jsonContent.login,
+      };
+    }
+    return null;
   }
   
 }
