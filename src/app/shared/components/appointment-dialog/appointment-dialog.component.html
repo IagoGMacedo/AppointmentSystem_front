@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Marcar um agendamento</h2>
+<form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()">
+    <mat-dialog-content align="center">
+        <mat-form-field>
+          <mat-label>Selecione uma data</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Selecione o horário</mat-label>
+          <mat-select formControlName="time">
+            @for (time of times; track times) {
+            <mat-option [value]="time">{{ time }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        
+      </mat-dialog-content>
+      <mat-dialog-actions style="margin-left: auto;">
+        <button mat-raised-button>Agendar</button>
+        <button mat-raised-button mat-dialog-close>Fechar</button>
+        @if(this.editAppointment && this.editAppointment.status === 1){
+            <button (click)="cancelAppointment()" mat-raised-button mat-dialog-close>Cancelar</button>
+        }
+      </mat-dialog-actions>
+</form>
+@if(this.editAppointment){
+    <!--
+        <mat-chip>{{getStatusString(this.editAppointment.status)}}</mat-chip>
+    -->
+
+    <mat-select disabled>
+        <mat-option value="1">Agendado</mat-option>
+        <mat-option value="2">Concluído</mat-option>
+        <mat-option value="3">Cancelado</mat-option>
+      </mat-select>
+}
+
