@@ -14,6 +14,7 @@ export const routes: Routes = [
     canActivate: [guestGuard],
     component: DefaultComponent,
     children: [{ path: '', component: LoginRegisterComponent }],
+    //children: [{ path: '', component: PatientHomePageComponent }],
   },
   {
     path: '',

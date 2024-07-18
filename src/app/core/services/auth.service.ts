@@ -13,7 +13,7 @@ import { Login, Register } from '../types/formTypes';
 })
 export class AuthService {
   constructor(
-    private http: HttpClient,
+    private http: HttpClient, 
     private tokenService: TokenService,
     private notificationService: NotificationService
   ) {}

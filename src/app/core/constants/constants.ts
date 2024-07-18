@@ -10,4 +10,9 @@ export const apiEndpoint = {
         register: `${apiUrl}/RegisterUser/CreateUser`,
         logout: `${apiUrl}/logout`
     },
+    AppointmentEndpoint:{
+        create: `${apiUrl}/RegisterAppointment/CreateAppointment`,
+        getById: `${apiUrl}/RegisterAppointment/GetAppointmentById`,
+        updateByPatient: `${apiUrl}/RegisterAppointment/UpdateAppointmentByPatient`,
+    }
 };  
