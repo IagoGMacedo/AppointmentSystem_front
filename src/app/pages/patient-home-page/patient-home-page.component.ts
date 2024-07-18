@@ -5,11 +5,13 @@ import { TokenService } from '../../core/services/token.service';
 import { AppointmentService } from '../../core/services/appointment.service';
 import {MatTableModule} from '@angular/material/table';
 import { Appointment } from '../../core/types/userTypes';
+import {MatBadgeModule} from '@angular/material/badge';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-patient-home-page',
   standalone: true,
-  imports: [MatTableModule],
+  imports: [MatTableModule, MatBadgeModule, DatePipe],
   templateUrl: './patient-home-page.component.html',
   styleUrl: './patient-home-page.component.scss'
 })
@@ -29,6 +31,10 @@ export class PatientHomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadAppointments();
+  }
+
+  loadAppointments(){
     this.tokenService.loggedUser.subscribe((user) => {
       if(user){
         console.log("mandei fazer a requisição");
@@ -56,16 +62,15 @@ export class PatientHomePageComponent implements OnInit {
       }
     });
 
-    
-
-    
-
     //posso passar uma função no construtor de AppointmentDialogComponent
     //pode ser de salvar ou editar
 
     _dialog.afterClosed().subscribe(result => {
       console.log("printando resultado");
       console.log(result);
+      if(result)
+        this.loadAppointments();
+
       //fazer requisição para buscar novos resultados aqui
     })
   }

@@ -25,6 +25,7 @@ import { TokenService } from '../../../core/services/token.service';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { Appointment, AppointmentForm, AppointmentUpdate } from '../../../core/types/userTypes';
 import { MatChipsModule } from '@angular/material/chips';
+import { NotificationService } from '../../../core/services/notification.service';
 
 export interface DialogData {
   title: string;
@@ -65,7 +66,8 @@ export class AppointmentDialogComponent implements OnInit {
   constructor(
     private formBuilderService: FormBuilder,
     private tokenService: TokenService,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +118,8 @@ export class AppointmentDialogComponent implements OnInit {
               };
               this.appointmentService.editAppointment(this.editAppointment.id, appoinment)
               .subscribe((result)=>{
-                this.dialogRef.close();
+                this.dialogRef.close(true);
+                this.notificationService.showSucess("Agendamento editado com sucesso");
               })
             } else {
               const appoinment: AppointmentForm = {
@@ -129,7 +132,8 @@ export class AppointmentDialogComponent implements OnInit {
               this.appointmentService
                 .createAppointment(appoinment)
                 .subscribe((result) => {
-                  this.dialogRef.close();
+                  this.dialogRef.close(true);
+                  this.notificationService.showSucess("Agendamento criado com sucesso");
                 });
             }
 
