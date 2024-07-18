@@ -14,5 +14,6 @@ export const apiEndpoint = {
         create: `${apiUrl}/RegisterAppointment/CreateAppointment`,
         getById: `${apiUrl}/RegisterAppointment/GetAppointmentById`,
         updateByPatient: `${apiUrl}/RegisterAppointment/UpdateAppointmentByPatient`,
+        filterAppointments: `${apiUrl}/RegisterAppointment/FilterAppointments`,
     }
 };  

@@ -59,6 +59,8 @@ export class AppointmentDialogComponent implements OnInit {
   times: string[] = [];
 
   editAppointment: Appointment | null = null;
+  disabled : boolean = true;
+
 
   constructor(
     private formBuilderService: FormBuilder,
@@ -76,7 +78,6 @@ export class AppointmentDialogComponent implements OnInit {
   appointmentForm = this.formBuilderService.group({
     date: [new Date(), Validators.required],
     time: ['07:00:00', Validators.required],
-    status: ['1']
   });
 
   generateTimes() {
@@ -91,7 +92,7 @@ export class AppointmentDialogComponent implements OnInit {
 
   cancelAppointment(){
     console.log("entrei no cancel appointment");
-    this.appointmentForm.controls.status.setValue('3');
+    this.editAppointment!.status = 3;
     this.saveAppointment();
   }
 
@@ -106,14 +107,12 @@ export class AppointmentDialogComponent implements OnInit {
           if (dateControlValue) {
             const formattedDate = dateControlValue.toISOString().split('T')[0];
 
-            
-
             if (this.editAppointment) {
               console.log("vou editar");
               const appoinment: AppointmentUpdate = {
                 appointmentTime: this.appointmentForm.controls.time.value!,
                 appointmentDate: formattedDate,
-                status: Number(this.appointmentForm.controls.status.value!)
+                status: this.editAppointment.status
               };
               this.appointmentService.editAppointment(this.editAppointment.id, appoinment)
               .subscribe((result)=>{
@@ -144,17 +143,19 @@ export class AppointmentDialogComponent implements OnInit {
     this.appointmentService.getAppointmentById(id).subscribe((appointment) => {
       if (appointment) {
         this.editAppointment = appointment as Appointment;
+        this.disabled = false;
         this.appointmentForm.setValue({
           date: new Date(appointment.appointmentDate), // Convert string to Date
           time: appointment.appointmentTime,
-          status: appointment.status.toString()
+          //status: appointment.status
         });
       }
     });
+    this.disabled = true;
   }
 
-  getStatusString(idStatus: number): string {
-    switch (idStatus) {
+  getStatusString(): string {
+    switch (this.editAppointment!.status) {
       case 1:
         return 'AGENDADO';
         break;

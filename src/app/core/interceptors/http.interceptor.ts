@@ -1,4 +1,4 @@
-import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { TokenService } from '../services/token.service';
 import { Router } from '@angular/router';
@@ -48,8 +48,20 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: ApiError) => {
       console.log('Error', error);
       
-
-      // to do: quitar o usuario fora da aplicação se vier um 401
+      if(error instanceof HttpErrorResponse){
+        if(error.status == 401){
+          console.log("deu 401");
+          tokenService.removeToken();
+          router.navigate(['']);
+        }
+      }
+      
+      // to do: transformar error para o tipo HttpErrorResponse
+      if(error.HttpStatus == 401){
+        console.log("deu 401");
+        tokenService.removeToken();
+        router.navigate(['']);
+      }
 
 
       notificationService.showError(
