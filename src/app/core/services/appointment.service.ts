@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { apiEndpoint } from '../constants/constants';
 import { Appointment, AppointmentForm, AppointmentUpdate } from '../types/userTypes';
+import { AppointmentFilter } from '../types/formTypes';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,17 @@ export class AppointmentService {
 
   getAppointmentById(id : number) : Observable<Appointment>{
     return this.http.get<Appointment>(`${apiEndpoint.AppointmentEndpoint.getById}?id=${id}`);
+  }
+  
+
+  private userAppointments = new BehaviorSubject<Appointment[]|null>(null);
+  userAppointments$ = this.userAppointments.asObservable();
+
+  getAppointmentsByUserId(userId : number){
+    this.http.post<Appointment[]>(`${apiEndpoint.AppointmentEndpoint.filterAppointments}`, {userId: Number(userId)})
+    .subscribe( (appointsments ) => {
+      this.userAppointments.next(appointsments);
+    });
   }
 
   editAppointment(id: number, data: AppointmentUpdate) : Observable<Appointment>{

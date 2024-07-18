@@ -20,6 +20,7 @@ export class TokenService {
     const token = this.getToken();
     if (token) {
       this.updateToken(true);
+      this.loggedUser.next(this.extractToken(token));
     }
   }
 
@@ -39,6 +40,7 @@ export class TokenService {
 
   removeToken() {
     this.updateToken(false);
+    this.loggedUser.next(null);
     localStorage.removeItem(constants.CURRENT_TOKEN);
   }
 

@@ -10,3 +10,11 @@ export type Register = {
     password: string;
     dateOfBirth: string;
 }
+
+export type AppointmentFilter = {
+    id: number | null;
+    userId: number | null;
+    appointmentDate: string | null;
+    appointmentime: string | null;
+    status: number | null;
+}
