@@ -15,5 +15,8 @@ export const apiEndpoint = {
         getById: `${apiUrl}/RegisterAppointment/GetAppointmentById`,
         updateByPatient: `${apiUrl}/RegisterAppointment/UpdateAppointmentByPatient`,
         filterAppointments: `${apiUrl}/RegisterAppointment/FilterAppointments`,
+    },
+    UserEndpoint:{
+        getUsersNamesAndIds: `${apiUrl}/RegisterUser/GetUsersNamesAndIds`,
     }
 };  

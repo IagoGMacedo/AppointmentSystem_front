@@ -15,7 +15,14 @@ export type AppointmentForm ={
     appointmentTime: string;
 }
 
-export type AppointmentUpdate = {
+export type AppointmentUpdatePatient = {
+    appointmentDate: string;
+    appointmentTime: string;
+    status: number;
+}
+
+export type AppointmentUpdateProfessional = {
+    userId: Number
     appointmentDate: string;
     appointmentTime: string;
     status: number;
@@ -23,10 +30,22 @@ export type AppointmentUpdate = {
 
 export type Appointment = {
     id: number
-    userId: number
+    userId: number,
+    userName: string,
     appointmentDate: string;
     appointmentTime: string;
     status: number;
     dateOfCreation: string;
+}
+
+export const StatusMapping: { [key: number]: string } = {
+    1: 'AGENDADO',
+    2: 'CONCLUIDO',
+    3: 'CANCELADO'
+  };
+
+export type UserNameAndId = {
+    id: number;
+    name: string;
 }
 

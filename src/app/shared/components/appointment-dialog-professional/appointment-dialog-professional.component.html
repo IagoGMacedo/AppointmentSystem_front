@@ -1,6 +1,14 @@
-<h2 mat-dialog-title>Marcar um agendamento</h2>
+<h2 mat-dialog-title>{{data.title}}</h2>
 <form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()">
     <mat-dialog-content align="center">
+        <mat-form-field>
+            <mat-label>Paciente</mat-label>
+            <mat-select formControlName="user">
+                @for (user of usersNamesAndIds; track usersNamesAndIds) {
+                <mat-option [value]="user.id">{{ user.name }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
         <mat-form-field>
           <mat-label>Selecione uma data</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="date" />
@@ -17,7 +25,7 @@
         </mat-form-field>
         @if(this.editAppointment){
             <mat-form-field>
-                <mat-chip>{{getStatusString()}}</mat-chip>
+                <mat-chip>{{StatusString}}</mat-chip>
             </mat-form-field>
         }
         
