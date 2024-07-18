@@ -24,10 +24,10 @@
       </mat-dialog-content>
       <mat-dialog-actions style="margin-left: auto;">
         <button mat-raised-button>Agendar</button>
-        <button mat-raised-button mat-dialog-close>Fechar</button>
         @if(this.editAppointment && this.editAppointment.status === 1){
-            <button (click)="cancelAppointment()" mat-raised-button mat-dialog-close>Cancelar</button>
+            <button mat-raised-button color="accent" (click)="cancelAppointment()">Cancelar agendamento</button>
         }
+        <button mat-raised-button mat-dialog-close>Fechar</button>
       </mat-dialog-actions>
 </form>
 

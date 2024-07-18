@@ -41,7 +41,7 @@ export class LoginRegisterComponent {
   }
 
   loginForm = this.formBuilderService.group({
-    login: ['', [Validators.required, Validators.minLength(4)]],
+    login: ['', [Validators.required]],
     password: ['', Validators.required],
   });
 
