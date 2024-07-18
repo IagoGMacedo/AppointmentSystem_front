@@ -23,9 +23,13 @@ import {
 } from '@angular/material/core';
 import { TokenService } from '../../../core/services/token.service';
 import { AppointmentService } from '../../../core/services/appointment.service';
-import { Appointment, AppointmentForm, AppointmentUpdate } from '../../../core/types/userTypes';
+import { Appointment, AppointmentForm, AppointmentUpdatePatient, AppointmentUpdateProfessional, StatusMapping, UserNameAndId } from '../../../core/types/userTypes';
 import { MatChipsModule } from '@angular/material/chips';
 import { NotificationService } from '../../../core/services/notification.service';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { UserService } from '../../../core/services/user.service';
+
+
 
 export interface DialogData {
   title: string;
@@ -33,7 +37,7 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-appointment-dialog',
+  selector: 'app-appointment-dialog-professional',
   standalone: true,
   imports: [
     FormsModule,
@@ -48,39 +52,56 @@ export interface DialogData {
   ],
   providers: [
     provideNativeDateAdapter(),
-    { provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
   ],
-  templateUrl: './appointment-dialog.component.html',
-  styleUrl: './appointment-dialog.component.scss',
+  templateUrl: './appointment-dialog-professional.component.html',
+  styleUrl: './appointment-dialog-professional.component.scss'
 })
-export class AppointmentDialogComponent implements OnInit {
-  readonly dialogRef = inject(MatDialogRef<AppointmentDialogComponent>);
+export class AppointmentDialogProfessionalComponent {
+  readonly dialogRef = inject(MatDialogRef<AppointmentDialogProfessionalComponent>);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
 
   times: string[] = [];
 
   editAppointment: Appointment | null = null;
-  disabled : boolean = true;
+
+  usersNamesAndIds: UserNameAndId[] = [];
 
 
   constructor(
     private formBuilderService: FormBuilder,
     private tokenService: TokenService,
     private appointmentService: AppointmentService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private userService : UserService
   ) {}
+
+  appointmentForm = this.formBuilderService.group({
+    user: [0,Validators.required],
+    date: [new Date(), Validators.required],
+    time: ['07:00:00', Validators.required],
+  });
 
   ngOnInit(): void {
     this.generateTimes();
+    this.generateUsersNamesAndIds();
+
     if (this.data.id > 0) {
       this.setAppointmentData(this.data.id);
     }
   }
 
-  appointmentForm = this.formBuilderService.group({
-    date: [new Date(), Validators.required],
-    time: ['07:00:00', Validators.required],
-  });
+
+  generateUsersNamesAndIds(){
+    this.userService.getUsersNamesAndIds();
+
+    this.userService.usersNamesAndIds$.subscribe((users) => {
+      if(users){
+        this.usersNamesAndIds = users;
+        console.log("deu bom os users");
+      }
+    });
+  }
 
   generateTimes() {
     const startHour = 7;
@@ -101,17 +122,15 @@ export class AppointmentDialogComponent implements OnInit {
   saveAppointment() {
     if (this.appointmentForm.valid) {
       console.log("entrei no save appointment");
-      //chamar o service aqui
-      this.tokenService.loggedUser.subscribe((user) => {
-        if (user) {
-          console.log('entrei no user');
+      
           const dateControlValue = this.appointmentForm.controls.date.value;
           if (dateControlValue) {
             const formattedDate = dateControlValue.toISOString().split('T')[0];
 
             if (this.editAppointment) {
               console.log("vou editar");
-              const appoinment: AppointmentUpdate = {
+              const appoinment: AppointmentUpdateProfessional= {
+                userId: this.appointmentForm.controls.user.value!,
                 appointmentTime: this.appointmentForm.controls.time.value!,
                 appointmentDate: formattedDate,
                 status: this.editAppointment.status
@@ -123,7 +142,7 @@ export class AppointmentDialogComponent implements OnInit {
               })
             } else {
               const appoinment: AppointmentForm = {
-                userId: Number(user.id),
+                userId: this.appointmentForm.controls.user.value!,
                 appointmentTime: this.appointmentForm.controls.time.value!,
                 appointmentDate: formattedDate,
               };
@@ -138,8 +157,7 @@ export class AppointmentDialogComponent implements OnInit {
             }
 
           }
-        }
-      });
+      
     }
   }
 
@@ -147,31 +165,22 @@ export class AppointmentDialogComponent implements OnInit {
     this.appointmentService.getAppointmentById(id).subscribe((appointment) => {
       if (appointment) {
         this.editAppointment = appointment as Appointment;
-        this.disabled = false;
-        this.appointmentForm.setValue({
-          date: new Date(appointment.appointmentDate), // Convert string to Date
-          time: appointment.appointmentTime,
-          //status: appointment.status
-        });
+
+        console.log("vou preencher com esses valores:");
+        console.log(this.editAppointment);
+        if (this.editAppointment && this.editAppointment.userId && this.editAppointment.appointmentTime) {
+          this.appointmentForm.patchValue({
+            user: this.editAppointment.userId,
+            date: new Date(`${appointment.appointmentDate} ${appointment.appointmentTime}`), // Convert string to Date
+            time: this.editAppointment.appointmentTime,
+          });
+        }
       }
     });
-    this.disabled = true;
   }
 
-  getStatusString(): string {
-    switch (this.editAppointment!.status) {
-      case 1:
-        return 'AGENDADO';
-        break;
-      case 2:
-        return 'CONCLUIDO';
-        break;
-      case 3:
-        return 'CANCELADO';
-        break;
-      default:
-        return '';
-        break;
-    }
+  get StatusString(): string {
+    return StatusMapping[this.editAppointment!.status] || '';
   }
+  
 }

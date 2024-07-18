@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog'
-import { AppointmentDialogComponent } from '../../shared/components/appointment-dialog/appointment-dialog.component';
 import { TokenService } from '../../core/services/token.service';
 import { AppointmentService } from '../../core/services/appointment.service';
 import {MatTableModule} from '@angular/material/table';
-import { Appointment } from '../../core/types/userTypes';
+import { Appointment, StatusMapping } from '../../core/types/userTypes';
 import {MatBadgeModule} from '@angular/material/badge';
 import { DatePipe } from '@angular/common';
+import { AppointmentDialogPatientComponent } from '../../shared/components/appointment-dialog-patient/appointment-dialog-patient.component';
 
 @Component({
   selector: 'app-patient-home-page',
@@ -53,7 +53,7 @@ export class PatientHomePageComponent implements OnInit {
   }
 
   openDialog(code: number, title: string){
-    var _dialog = this.dialog.open(AppointmentDialogComponent, {
+    var _dialog = this.dialog.open(AppointmentDialogPatientComponent, {
       width: '60%',
       height: '60%',
       data: {
@@ -81,6 +81,10 @@ export class PatientHomePageComponent implements OnInit {
 
   createAppointment(){
     this.openDialog(0, "Marcar agendamento");
+  }
+
+  getStatusString(id: number): string {
+    return StatusMapping[id] || '';
   }
 
 }
