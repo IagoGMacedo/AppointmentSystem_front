@@ -23,20 +23,16 @@ import {
 } from '@angular/material/core';
 import { TokenService } from '../../../core/services/token.service';
 import { AppointmentService } from '../../../core/services/appointment.service';
-import { Appointment, AppointmentForm, AppointmentUpdatePatient, AppointmentUpdateProfessional, StatusMapping, UserNameAndId } from '../../../core/types/userTypes';
+
 import { MatChipsModule } from '@angular/material/chips';
 import { NotificationService } from '../../../core/services/notification.service';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { UserService } from '../../../core/services/user.service';
 import { formatDate } from '@angular/common';
 import { CommonModule } from '@angular/common';
-
-
-
-export interface DialogData {
-  title: string;
-  id: number;
-}
+import { Appointment, AppointmentUpdateProfessional, StatusMapping } from '../../../core/types/appointmentTypes';
+import { UserNameAndId } from '../../../core/types/userTypes';
+import { AppointmentForm } from '../../../core/types/formTypes';
 
 @Component({
   selector: 'app-appointment-dialog-professional',
@@ -58,10 +54,12 @@ export interface DialogData {
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
   ],
   templateUrl: './appointment-dialog-professional.component.html',
-  styleUrl: './appointment-dialog-professional.component.scss'
+  styleUrl: './appointment-dialog-professional.component.scss',
 })
 export class AppointmentDialogProfessionalComponent {
-  readonly dialogRef = inject(MatDialogRef<AppointmentDialogProfessionalComponent>);
+  readonly dialogRef = inject(
+    MatDialogRef<AppointmentDialogProfessionalComponent>
+  );
   readonly data = inject<number>(MAT_DIALOG_DATA);
 
   times: string[] = [];
@@ -70,22 +68,16 @@ export class AppointmentDialogProfessionalComponent {
 
   usersNamesAndIds: UserNameAndId[] = [];
 
-
   constructor(
     private formBuilderService: FormBuilder,
     private tokenService: TokenService,
     private appointmentService: AppointmentService,
     private notificationService: NotificationService,
-    private userService : UserService
-  ) {
-    if (this.data > 0) {
-      this.setAppointmentData(this.data);
-    }
-
-  }
+    private userService: UserService
+  ) {}
 
   appointmentForm = this.formBuilderService.group({
-    user: [0,Validators.required],
+    user: [0, Validators.required],
     date: [new Date(), Validators.required],
     time: ['07:00:00', Validators.required],
   });
@@ -94,16 +86,16 @@ export class AppointmentDialogProfessionalComponent {
     this.generateTimes();
     this.generateUsersNamesAndIds();
 
-    
+    if (this.data > 0) {
+      this.setAppointmentData(this.data);
+    }
   }
-  
 
-
-  generateUsersNamesAndIds(){
+  generateUsersNamesAndIds() {
     this.userService.getUsersNamesAndIds();
 
     this.userService.usersNamesAndIds$.subscribe((users) => {
-      if(users){
+      if (users) {
         this.usersNamesAndIds = users;
       }
     });
@@ -119,55 +111,60 @@ export class AppointmentDialogProfessionalComponent {
     }
   }
 
-  completeAppointment(){
+  completeAppointment() {
     this.editAppointment!.status = 2;
     this.saveAppointment();
   }
 
-  cancelAppointment(){
+  cancelAppointment() {
     this.editAppointment!.status = 3;
     this.saveAppointment();
   }
 
   saveAppointment() {
     if (this.appointmentForm.valid) {
-      
-          const dateControlValue = this.appointmentForm.controls.date.value;
-          if (dateControlValue) {
-            const formattedDate = formatDate(dateControlValue, 'yyyy-MM-dd', 'en-US');
+      const dateControlValue = this.appointmentForm.controls.date.value;
+      if (dateControlValue) {
+        const formattedDate = formatDate(
+          dateControlValue,
+          'yyyy-MM-dd',
+          'en-US'
+        );
 
-            if (this.editAppointment) {
-              const appoinment: AppointmentUpdateProfessional= {
-                userId: this.appointmentForm.controls.user.value!,
-                appointmentTime: this.appointmentForm.controls.time.value!,
-                appointmentDate: formattedDate,
-                status: this.editAppointment.status
-              };
-              (this.editAppointment.id);
-              this.appointmentService.editAppointmentByProfessional(this.editAppointment.id, appoinment)
-              .subscribe((result)=>{
-                this.dialogRef.close(true);
-                this.notificationService.showSucess("Agendamento editado com sucesso");
-              })
-            } else {
-              const appoinment: AppointmentForm = {
-                userId: this.appointmentForm.controls.user.value!,
-                appointmentTime: this.appointmentForm.controls.time.value!,
-                appointmentDate: formattedDate,
-              };
+        if (this.editAppointment) {
+          const appoinment: AppointmentUpdateProfessional = {
+            userId: this.appointmentForm.controls.user.value!,
+            appointmentTime: this.appointmentForm.controls.time.value!,
+            appointmentDate: formattedDate,
+            status: this.editAppointment.status,
+          };
+          this.editAppointment.id;
+          this.appointmentService
+            .editAppointmentByProfessional(this.editAppointment.id, appoinment)
+            .subscribe((result) => {
+              this.dialogRef.close(true);
+              this.notificationService.showSucess(
+                'Agendamento editado com sucesso'
+              );
+            });
+        } else {
+          const appoinment: AppointmentForm = {
+            userId: this.appointmentForm.controls.user.value!,
+            appointmentTime: this.appointmentForm.controls.time.value!,
+            appointmentDate: formattedDate,
+          };
 
-
-              this.appointmentService
-                .createAppointment(appoinment)
-                .subscribe((result) => {
-                  this.dialogRef.close(true);
-                  this.notificationService.showSucess("Agendamento criado com sucesso");
-                });
-            }
-
-          }
-      
-    }  else{
+          this.appointmentService
+            .createAppointment(appoinment)
+            .subscribe((result) => {
+              this.dialogRef.close(true);
+              this.notificationService.showSucess(
+                'Agendamento criado com sucesso'
+              );
+            });
+        }
+      }
+    } else {
     }
   }
 
@@ -176,10 +173,16 @@ export class AppointmentDialogProfessionalComponent {
       if (appointment) {
         this.editAppointment = appointment as Appointment;
 
-        if (this.editAppointment && this.editAppointment.userId && this.editAppointment.appointmentTime) {
+        if (
+          this.editAppointment &&
+          this.editAppointment.userId &&
+          this.editAppointment.appointmentTime
+        ) {
           this.appointmentForm.patchValue({
             user: this.editAppointment.userId,
-            date: new Date(`${appointment.appointmentDate} ${appointment.appointmentTime}`), // Convert string to Date
+            date: new Date(
+              `${appointment.appointmentDate} ${appointment.appointmentTime}`
+            ), // Convert string to Date
             time: this.editAppointment.appointmentTime,
           });
         }
@@ -191,8 +194,7 @@ export class AppointmentDialogProfessionalComponent {
     return StatusMapping[this.editAppointment!.status] || '';
   }
 
-  get isEditing(){
+  get isEditing() {
     return this.editAppointment && this.editAppointment.status === 1;
   }
-  
 }

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { apiEndpoint } from '../constants/constants';
-import { Appointment, AppointmentForm, AppointmentUpdatePatient, AppointmentUpdateProfessional } from '../types/userTypes';
-import { AppointmentFilter } from '../types/formTypes';
+import { AppointmentFilter, AppointmentForm } from '../types/formTypes';
+import { Appointment, AppointmentUpdatePatient, AppointmentUpdateProfessional } from '../types/appointmentTypes';
 
 @Injectable({
   providedIn: 'root'

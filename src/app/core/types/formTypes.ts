@@ -18,3 +18,9 @@ export type AppointmentFilter = {
     appointmentime: string | null;
     status: number | null;
 }
+
+export type AppointmentForm ={
+    userId: Number
+    appointmentDate: string;
+    appointmentTime: string;
+}

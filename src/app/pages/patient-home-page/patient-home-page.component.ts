@@ -3,10 +3,10 @@ import {MatDialog} from '@angular/material/dialog'
 import { TokenService } from '../../core/services/token.service';
 import { AppointmentService } from '../../core/services/appointment.service';
 import {MatTableModule} from '@angular/material/table';
-import { Appointment, StatusMapping } from '../../core/types/userTypes';
 import {MatBadgeModule} from '@angular/material/badge';
 import { DatePipe } from '@angular/common';
 import { AppointmentDialogPatientComponent } from '../../shared/components/appointment-dialog-patient/appointment-dialog-patient.component';
+import { Appointment, StatusMapping } from '../../core/types/appointmentTypes';
 
 @Component({
   selector: 'app-patient-home-page',

@@ -46,35 +46,35 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
     }),
     //castando o erro pro meu tipo de erro
     catchError((error: ApiError) => {
+      let unathorized  = false;
       console.log('Error', error);
       
+      //castando para verificar se foi um 401
       if(error instanceof HttpErrorResponse){
         if(error.status == 401){
+          unathorized = true;
           tokenService.removeToken();
           dialog.closeAll();
           router.navigate(['']);
         }
       }
+
+      const defaultMessage = unathorized ? 'token expirado' : 
+      'Ocorreu um erro, entre em contato com o administrador';
       
-      // to do: transformar error para o tipo HttpErrorResponse
-      if(error.HttpStatus == 401){
-
-        tokenService.removeToken();
-        router.navigate(['']);
-      }
-
-
       notificationService.showError(
         error?.Messages
           ? error.Messages[0]
-          : 'Ocorreu um erro, entre em contato com o administrador'
+          : defaultMessage
       );
+
       throw {
         status: error.HttpStatus,
         message: error?.Messages
           ? error.Messages[0]
-          : 'Ocorreu um erro, entre em contato com o administrador',
+          : defaultMessage,
       };
+
     }),
     finalize(() => loading.hide())
   );

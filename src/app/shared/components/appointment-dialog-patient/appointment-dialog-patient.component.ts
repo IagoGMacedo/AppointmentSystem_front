@@ -24,10 +24,11 @@ import {
 } from '@angular/material/core';
 import { TokenService } from '../../../core/services/token.service';
 import { AppointmentService } from '../../../core/services/appointment.service';
-import { Appointment, AppointmentForm, AppointmentUpdatePatient, StatusMapping } from '../../../core/types/userTypes';
 import { MatChipsModule } from '@angular/material/chips';
 import { NotificationService } from '../../../core/services/notification.service';
 import { formatDate } from '@angular/common';
+import { Appointment, AppointmentUpdatePatient, StatusMapping } from '../../../core/types/appointmentTypes';
+import { AppointmentForm } from '../../../core/types/formTypes';
 
 
 
