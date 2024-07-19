@@ -15,7 +15,7 @@ export class HeaderComponent {
   loggedUser : User | null = null;
 
   constructor(private tokenService : TokenService, private authService : AuthService){
-    tokenService.loggedUser.subscribe((user) => {
+    tokenService.loggedUser$.subscribe((user) => {
       if(user){
         this.loggedUser = user;
       }

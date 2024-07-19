@@ -16,6 +16,8 @@ export class TokenService {
     null
   );
 
+  loggedUser$ = this.loggedUser.asObservable();
+
   constructor() {
     const token = this.getToken();
     if (token) {
@@ -26,6 +28,9 @@ export class TokenService {
 
   updateToken(status: boolean) {
     this.isAuthentication.next(status);
+    if(!status){
+      this.loggedUser.next(null);
+    }
   }
 
   setToken(token: string) {

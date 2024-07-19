@@ -104,7 +104,7 @@ export class AppointmentDialogPatientComponent {
     if (this.appointmentForm.valid) {
       console.log("entrei no save appointment");
       //chamar o service aqui
-      this.tokenService.loggedUser.subscribe((user) => {
+      this.tokenService.loggedUser$.subscribe((user) => {
         if (user) {
           console.log('entrei no user');
           const dateControlValue = this.appointmentForm.controls.date.value;

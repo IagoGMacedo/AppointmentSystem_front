@@ -35,14 +35,13 @@ export class PatientHomePageComponent implements OnInit {
   }
 
   loadAppointments(){
-    this.tokenService.loggedUser.subscribe((user) => {
-      if(user){
-        console.log("mandei fazer a requisição");
-        this.appointmentService.getAppointmentsByUserId(user.id);
-      } else{
-        console.log("ta duro dog");
-      }
-    })
+    const user = this.tokenService.getLoggedUser()
+    if(user){
+      console.log("mandei fazer a requisição");
+      this.appointmentService.getAppointmentsByUserId(user.id);
+    }
+      
+    
 
     this.appointmentService.userAppointments$.subscribe(appointsments => {
       if(appointsments){
