@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{data.title}}</h2>
+<h2 mat-dialog-title>{{isEditing ? "Editar agendamento" : "Criar agendamento"}}</h2>
 <form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()">
     <mat-dialog-content align="center">
         <mat-form-field>
@@ -16,16 +16,14 @@
           </mat-select>
         </mat-form-field>
         @if(this.editAppointment){
-            <mat-form-field>
                 <mat-chip>{{StatusString}}</mat-chip>
-            </mat-form-field>
         }
         
       </mat-dialog-content>
       <mat-dialog-actions style="margin-left: auto;">
-        <button mat-raised-button>Agendar</button>
-        @if(this.editAppointment && this.editAppointment.status === 1){
-            <button mat-raised-button color="accent" (click)="cancelAppointment()">Cancelar agendamento</button>
+        <button mat-raised-button>{{ isEditing ? "Editar" : "Salvar" }}</button>
+        @if(isEditing){
+            <button mat-raised-button color="warn" (click)="cancelAppointment()">Cancelar agendamento</button>
         }
         <button mat-raised-button mat-dialog-close>Fechar</button>
       </mat-dialog-actions>

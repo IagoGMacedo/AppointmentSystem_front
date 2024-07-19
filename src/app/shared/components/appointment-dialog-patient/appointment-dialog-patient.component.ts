@@ -27,13 +27,10 @@ import { AppointmentService } from '../../../core/services/appointment.service';
 import { Appointment, AppointmentForm, AppointmentUpdatePatient, StatusMapping } from '../../../core/types/userTypes';
 import { MatChipsModule } from '@angular/material/chips';
 import { NotificationService } from '../../../core/services/notification.service';
+import { formatDate } from '@angular/common';
 
 
 
-export interface DialogData {
-  title: string;
-  id: number;
-}
 
 @Component({
   selector: 'app-appointment-dialog-patient',
@@ -58,7 +55,7 @@ export interface DialogData {
 })
 export class AppointmentDialogPatientComponent {
   readonly dialogRef = inject(MatDialogRef<AppointmentDialogPatientComponent>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+  readonly data = inject<number>(MAT_DIALOG_DATA);
 
   times: string[] = [];
 
@@ -74,8 +71,8 @@ export class AppointmentDialogPatientComponent {
 
   ngOnInit(): void {
     this.generateTimes();
-    if (this.data.id > 0) {
-      this.setAppointmentData(this.data.id);
+    if (this.data > 0) {
+      this.setAppointmentData(this.data);
     }
   }
 
@@ -106,19 +103,18 @@ export class AppointmentDialogPatientComponent {
       //chamar o service aqui
       this.tokenService.loggedUser$.subscribe((user) => {
         if (user) {
-          console.log('entrei no user');
           const dateControlValue = this.appointmentForm.controls.date.value;
           if (dateControlValue) {
-            const formattedDate = dateControlValue.toISOString().split('T')[0];
+            const formattedDate = formatDate(dateControlValue, 'yyyy-MM-dd', 'en-US');
 
             if (this.editAppointment) {
-              console.log("vou editar");
+              console.log("vou fazer edição");
               const appoinment: AppointmentUpdatePatient = {
                 appointmentTime: this.appointmentForm.controls.time.value!,
                 appointmentDate: formattedDate,
                 status: this.editAppointment.status
               };
-              this.appointmentService.editAppointment(this.editAppointment.id, appoinment)
+              this.appointmentService.editAppointmentByPatient(this.editAppointment.id, appoinment)
               .subscribe((result)=>{
                 this.dialogRef.close(true);
                 this.notificationService.showSucess("Agendamento editado com sucesso");
@@ -142,18 +138,18 @@ export class AppointmentDialogPatientComponent {
           }
         }
       });
+    } else{
+      console.log("não está válido!");
     }
   }
 
-  setAppointmentData(id: number) {
+  async setAppointmentData(id: number) {
     this.appointmentService.getAppointmentById(id).subscribe((appointment) => {
       if (appointment) {
         this.editAppointment = appointment as Appointment;
-        const newDate = `${appointment.appointmentDate} ${appointment.appointmentTime}`;
         this.appointmentForm.setValue({
-          date: new Date("2003-29-01"), // Convert string to Date
+          date: new Date(`${appointment.appointmentDate} ${appointment.appointmentTime}`), // Ensure correct conversion
           time: appointment.appointmentTime,
-          //status: appointment.status
         });
       }
     });
@@ -161,5 +157,9 @@ export class AppointmentDialogPatientComponent {
 
   get StatusString(): string {
     return StatusMapping[this.editAppointment!.status] || '';
+  }
+
+  get isEditing(){
+    return this.editAppointment && this.editAppointment.status === 1;
   }
 }
