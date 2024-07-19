@@ -40,6 +40,7 @@ export class PatientHomePageComponent implements OnInit {
       console.log("mandei fazer a requisição");
       this.appointmentService.getAppointmentsByUserId(user.id);
     }
+    
       
     
 

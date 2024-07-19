@@ -47,6 +47,7 @@ export class TokenService {
     this.updateToken(false);
     this.loggedUser.next(null);
     localStorage.removeItem(constants.CURRENT_TOKEN);
+    
   }
 
   getLoggedUser(): User | null {

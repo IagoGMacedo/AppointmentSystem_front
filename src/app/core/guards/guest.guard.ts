@@ -7,7 +7,7 @@ export const guestGuard: CanActivateFn = (route, state) => {
   const tokenService = inject(TokenService);
   const router = inject(Router);
 
-
+  /* 
   tokenService.loggedUser$.subscribe({
     next: (user) => {
       if(user){
@@ -19,6 +19,25 @@ export const guestGuard: CanActivateFn = (route, state) => {
       }
     }
   })
+    */
+
+  tokenService.isAuthentication.subscribe((val) => {
+    if(val){
+      
+       tokenService.loggedUser$.subscribe((user) => {
+        if(user){
+          if(user.profile === 'Patient'){
+            router.navigate(['patient']);
+  
+          }else if(user.profile === "Professional"){
+          router.navigate(['professional']);
+          }
+        }
+       })
+    }
+  })
+
+  
 
   return true;
 };

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../services/notification.service';
 import { LoadingService } from '../services/loading.service';
 import { catchError, finalize, tap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 type ApiError = {
   Data: null;
@@ -17,6 +18,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const notificationService = inject(NotificationService);
   const loading = inject(LoadingService);
+  const dialog = inject(MatDialog);
 
   loading.show();
   
@@ -50,15 +52,17 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
       
       if(error instanceof HttpErrorResponse){
         if(error.status == 401){
-          console.log("deu 401");
+          console.log("deu 401 no primeiro");
           tokenService.removeToken();
+          dialog.closeAll();
           router.navigate(['']);
         }
       }
       
       // to do: transformar error para o tipo HttpErrorResponse
       if(error.HttpStatus == 401){
-        console.log("deu 401");
+
+        console.log("deu 401 no segundo");
         tokenService.removeToken();
         router.navigate(['']);
       }
