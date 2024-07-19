@@ -18,8 +18,8 @@ import { AppointmentDialogProfessionalComponent } from '../../shared/components/
 export class ProfessionalHomePageComponent implements OnInit {
   appointments : Appointment[] = [];
 
-  //  'userId',
-  displayedColumns: string[] = ['id', 'appointmentDate', 'appointmentTime', 'userName',
+  //'id'  'userId',
+  displayedColumns: string[] = ['appointmentDate', 'appointmentTime', 'userName',
     'status', 'dateOfCreation', '#'
   ];
 

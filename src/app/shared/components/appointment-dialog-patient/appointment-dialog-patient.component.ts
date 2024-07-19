@@ -100,44 +100,44 @@ export class AppointmentDialogPatientComponent {
   saveAppointment() {
     if (this.appointmentForm.valid) {
       console.log("entrei no save appointment");
-      //chamar o service aqui
-      this.tokenService.loggedUser$.subscribe((user) => {
-        if (user) {
-          const dateControlValue = this.appointmentForm.controls.date.value;
-          if (dateControlValue) {
-            const formattedDate = formatDate(dateControlValue, 'yyyy-MM-dd', 'en-US');
+      
+      const user = this.tokenService.getLoggedUser();
+      if (user) {
+        const dateControlValue = this.appointmentForm.controls.date.value;
+        if (dateControlValue) {
+          const formattedDate = formatDate(dateControlValue, 'yyyy-MM-dd', 'en-US');
 
-            if (this.editAppointment) {
-              console.log("vou fazer edição");
-              const appoinment: AppointmentUpdatePatient = {
-                appointmentTime: this.appointmentForm.controls.time.value!,
-                appointmentDate: formattedDate,
-                status: this.editAppointment.status
-              };
-              this.appointmentService.editAppointmentByPatient(this.editAppointment.id, appoinment)
-              .subscribe((result)=>{
+          if (this.editAppointment) {
+            console.log("vou fazer edição");
+            const appoinment: AppointmentUpdatePatient = {
+              appointmentTime: this.appointmentForm.controls.time.value!,
+              appointmentDate: formattedDate,
+              status: this.editAppointment.status
+            };
+            this.appointmentService.editAppointmentByPatient(this.editAppointment.id, appoinment)
+            .subscribe((result)=>{
+              this.dialogRef.close(true);
+              this.notificationService.showSucess("Agendamento editado com sucesso");
+            })
+          } else {
+            const appoinment: AppointmentForm = {
+              userId: Number(user.id),
+              appointmentTime: this.appointmentForm.controls.time.value!,
+              appointmentDate: formattedDate,
+            };
+
+
+            this.appointmentService
+              .createAppointment(appoinment)
+              .subscribe((result) => {
                 this.dialogRef.close(true);
-                this.notificationService.showSucess("Agendamento editado com sucesso");
-              })
-            } else {
-              const appoinment: AppointmentForm = {
-                userId: Number(user.id),
-                appointmentTime: this.appointmentForm.controls.time.value!,
-                appointmentDate: formattedDate,
-              };
-
-
-              this.appointmentService
-                .createAppointment(appoinment)
-                .subscribe((result) => {
-                  this.dialogRef.close(true);
-                  this.notificationService.showSucess("Agendamento criado com sucesso");
-                });
-            }
-
+                this.notificationService.showSucess("Agendamento criado com sucesso");
+              });
           }
+
         }
-      });
+      }
+
     } else{
       console.log("não está válido!");
     }
