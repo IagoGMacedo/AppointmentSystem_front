@@ -145,7 +145,7 @@ export class AppointmentDialogPatientComponent {
       if (appointment) {
         this.editAppointment = appointment as Appointment;
         this.appointmentForm.setValue({
-          date: new Date(`${appointment.appointmentDate} ${appointment.appointmentTime}`), // Ensure correct conversion
+          date: new Date(`${appointment.appointmentDate} ${appointment.appointmentTime}`), 
           time: appointment.appointmentTime,
         });
       }

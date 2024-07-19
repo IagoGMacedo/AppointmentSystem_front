@@ -40,8 +40,6 @@ export class PatientHomePageComponent implements OnInit {
       this.appointmentService.getAppointmentsByUserId(user.id);
     }
     
-      
-    
 
     this.appointmentService.userAppointments$.subscribe(appointsments => {
       if(appointsments){
@@ -57,14 +55,10 @@ export class PatientHomePageComponent implements OnInit {
       data: code
     });
 
-    //posso passar uma função no construtor de AppointmentDialogComponent
-    //pode ser de salvar ou editar
-
     _dialog.afterClosed().subscribe(result => {
       if(result)
         this.loadAppointments();
 
-      //fazer requisição para buscar novos resultados aqui
     })
   }
 

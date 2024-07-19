@@ -36,7 +36,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     tap((value) => {
-      //notificationService.hideError();
       if (value instanceof HttpResponse) {
         const apiError: ApiError = value.body as ApiError;
         if (apiError.HttpStatus && apiError.HttpStatus !== 200) {

@@ -54,7 +54,6 @@ export class TokenService {
     let token: string | null = localStorage.getItem(constants.CURRENT_TOKEN);
     if (token) {
       let jsonContent = JSON.parse(atob(token.split('.')[1]));
-      //return jsonContent as IUser; assim seria o melhor jeito?
       return {
         id: jsonContent[
           'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid'
@@ -74,7 +73,6 @@ export class TokenService {
 
   extractToken(token : string) : User{
     let jsonContent = JSON.parse(atob(token.split('.')[1]));
-      //return jsonContent as IUser; assim seria o melhor jeito?
       return {
         id: jsonContent[
           'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid'

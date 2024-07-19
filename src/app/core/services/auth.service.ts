@@ -28,7 +28,6 @@ export class AuthService {
         params: params,
       })
       .pipe(
-        //aqui pode ser tap
         map((response) => {
           if (response) {
             this.tokenService.setToken(response.token);

@@ -182,7 +182,7 @@ export class AppointmentDialogProfessionalComponent {
             user: this.editAppointment.userId,
             date: new Date(
               `${appointment.appointmentDate} ${appointment.appointmentTime}`
-            ), // Convert string to Date
+            ), 
             time: this.editAppointment.appointmentTime,
           });
         }

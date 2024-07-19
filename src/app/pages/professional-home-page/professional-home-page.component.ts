@@ -56,14 +56,11 @@ export class ProfessionalHomePageComponent implements OnInit {
       data: code
     });
 
-    //posso passar uma função no construtor de AppointmentDialogComponent
-    //pode ser de salvar ou editar
 
     _dialog.afterClosed().subscribe(result => {
       if(result)
         this.loadAppointments();
 
-      //fazer requisição para buscar novos resultados aqui
     })
   }
 
