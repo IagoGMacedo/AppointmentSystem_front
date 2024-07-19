@@ -7,16 +7,16 @@ const apiUrl = 'http://localhost:5206/api';
 export const apiEndpoint = {
     AuthEndpoint: {
         login: `${apiUrl}/Authentication/login`,
-        register: `${apiUrl}/RegisterUser/CreateUser`,
+        register: `${apiUrl}/User/CreateUser`,
         logout: `${apiUrl}/logout`
     },
     AppointmentEndpoint:{
-        create: `${apiUrl}/RegisterAppointment/CreateAppointment`,
-        getById: `${apiUrl}/RegisterAppointment/GetAppointmentById`,
-        updateByPatient: `${apiUrl}/RegisterAppointment/UpdateAppointmentByPatient`,
-        filterAppointments: `${apiUrl}/RegisterAppointment/FilterAppointments`,
+        create: `${apiUrl}/Appointment/CreateAppointment`,
+        getById: `${apiUrl}/Appointment/GetAppointmentById`,
+        updateByPatient: `${apiUrl}/Appointment/UpdateAppointmentByPatient`,
+        filterAppointments: `${apiUrl}/Appointment/FilterAppointments`,
     },
     UserEndpoint:{
-        getUsersNamesAndIds: `${apiUrl}/RegisterUser/GetUsersNamesAndIds`,
+        getUsersNamesAndIds: `${apiUrl}/User/GetUsersNamesAndIds`,
     }
 };  
