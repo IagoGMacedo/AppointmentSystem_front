@@ -28,6 +28,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { NotificationService } from '../../../core/services/notification.service';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { UserService } from '../../../core/services/user.service';
+import { formatDate } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -40,6 +42,7 @@ export interface DialogData {
   selector: 'app-appointment-dialog-professional',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     MatInputModule,
     MatButtonModule,
@@ -59,7 +62,7 @@ export interface DialogData {
 })
 export class AppointmentDialogProfessionalComponent {
   readonly dialogRef = inject(MatDialogRef<AppointmentDialogProfessionalComponent>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+  readonly data = inject<number>(MAT_DIALOG_DATA);
 
   times: string[] = [];
 
@@ -74,7 +77,12 @@ export class AppointmentDialogProfessionalComponent {
     private appointmentService: AppointmentService,
     private notificationService: NotificationService,
     private userService : UserService
-  ) {}
+  ) {
+    if (this.data > 0) {
+      this.setAppointmentData(this.data);
+    }
+
+  }
 
   appointmentForm = this.formBuilderService.group({
     user: [0,Validators.required],
@@ -86,10 +94,9 @@ export class AppointmentDialogProfessionalComponent {
     this.generateTimes();
     this.generateUsersNamesAndIds();
 
-    if (this.data.id > 0) {
-      this.setAppointmentData(this.data.id);
-    }
+    
   }
+  
 
 
   generateUsersNamesAndIds(){
@@ -98,7 +105,6 @@ export class AppointmentDialogProfessionalComponent {
     this.userService.usersNamesAndIds$.subscribe((users) => {
       if(users){
         this.usersNamesAndIds = users;
-        console.log("deu bom os users");
       }
     });
   }
@@ -113,8 +119,12 @@ export class AppointmentDialogProfessionalComponent {
     }
   }
 
+  completeAppointment(){
+    this.editAppointment!.status = 2;
+    this.saveAppointment();
+  }
+
   cancelAppointment(){
-    console.log("entrei no cancel appointment");
     this.editAppointment!.status = 3;
     this.saveAppointment();
   }
@@ -125,7 +135,7 @@ export class AppointmentDialogProfessionalComponent {
       
           const dateControlValue = this.appointmentForm.controls.date.value;
           if (dateControlValue) {
-            const formattedDate = dateControlValue.toISOString().split('T')[0];
+            const formattedDate = formatDate(dateControlValue, 'yyyy-MM-dd', 'en-US');
 
             if (this.editAppointment) {
               console.log("vou editar");
@@ -135,7 +145,8 @@ export class AppointmentDialogProfessionalComponent {
                 appointmentDate: formattedDate,
                 status: this.editAppointment.status
               };
-              this.appointmentService.editAppointment(this.editAppointment.id, appoinment)
+              console.log(this.editAppointment.id);
+              this.appointmentService.editAppointmentByProfessional(this.editAppointment.id, appoinment)
               .subscribe((result)=>{
                 this.dialogRef.close(true);
                 this.notificationService.showSucess("Agendamento editado com sucesso");
@@ -158,6 +169,8 @@ export class AppointmentDialogProfessionalComponent {
 
           }
       
+    }  else{
+      console.log("nao está valido!")
     }
   }
 
@@ -174,6 +187,7 @@ export class AppointmentDialogProfessionalComponent {
             date: new Date(`${appointment.appointmentDate} ${appointment.appointmentTime}`), // Convert string to Date
             time: this.editAppointment.appointmentTime,
           });
+          console.log("preenchi os valores");
         }
       }
     });
@@ -181,6 +195,10 @@ export class AppointmentDialogProfessionalComponent {
 
   get StatusString(): string {
     return StatusMapping[this.editAppointment!.status] || '';
+  }
+
+  get isEditing(){
+    return this.editAppointment && this.editAppointment.status === 1;
   }
   
 }

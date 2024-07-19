@@ -34,9 +34,9 @@ export class TokenService {
   }
 
   setToken(token: string) {
+    localStorage.setItem(constants.CURRENT_TOKEN, token);
     this.updateToken(true);
     this.loggedUser.next(this.extractToken(token));
-    localStorage.setItem(constants.CURRENT_TOKEN, token);
   }
 
   getToken(): string | null {

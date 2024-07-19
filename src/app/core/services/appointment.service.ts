@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { apiEndpoint } from '../constants/constants';
-import { Appointment, AppointmentForm, AppointmentUpdatePatient } from '../types/userTypes';
+import { Appointment, AppointmentForm, AppointmentUpdatePatient, AppointmentUpdateProfessional } from '../types/userTypes';
 import { AppointmentFilter } from '../types/formTypes';
 
 @Injectable({
@@ -43,25 +43,11 @@ export class AppointmentService {
     });
   }
 
-  editAppointment(id: number, data: AppointmentUpdatePatient) : Observable<Appointment>{
-    //const update : AppointmentUpdate = {appointmentDate: data.appointmentDate, appointmentTime: data.appointmentTime};
+  editAppointmentByPatient(id: number, data: AppointmentUpdatePatient) : Observable<Appointment>{
     return this.http.put<Appointment>(`${apiEndpoint.AppointmentEndpoint.updateByPatient}?idAppointment=${id}`, data);
   }
 
-  getStatusString(id: number): string {
-    switch (id) {
-      case 1:
-        return 'AGENDADO';
-        break;
-      case 2:
-        return 'CONCLUIDO';
-        break;
-      case 3:
-        return 'CANCELADO';
-        break;
-      default:
-        return '';
-        break;
-    }
+  editAppointmentByProfessional(id: number, data: AppointmentUpdateProfessional) : Observable<Appointment>{
+    return this.http.put<Appointment>(`${apiEndpoint.AppointmentEndpoint.updateByProfessional}?idAppointment=${id}`, data);
   }
 }

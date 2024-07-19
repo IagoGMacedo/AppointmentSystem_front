@@ -1,42 +1,50 @@
-<h2 mat-dialog-title>{{data.title}}</h2>
+<h2 mat-dialog-title>
+  {{ isEditing ? "Editar agendamento" : "Criar agendamento" }}
+</h2>
 <form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()">
-    <mat-dialog-content align="center">
-        <mat-form-field>
-            <mat-label>Paciente</mat-label>
-            <mat-select formControlName="user">
-                @for (user of usersNamesAndIds; track usersNamesAndIds) {
-                <mat-option [value]="user.id">{{ user.name }}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Selecione uma data</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date" />
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Selecione o horário</mat-label>
-          <mat-select formControlName="time">
-            @for (time of times; track times) {
-            <mat-option [value]="time">{{ time }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        @if(this.editAppointment){
-            <mat-form-field>
-                <mat-chip>{{StatusString}}</mat-chip>
-            </mat-form-field>
-        }
-        
-      </mat-dialog-content>
-      <mat-dialog-actions style="margin-left: auto;">
-        <button mat-raised-button>Agendar</button>
-        @if(this.editAppointment && this.editAppointment.status === 1){
-            <button mat-raised-button color="accent" (click)="cancelAppointment()">Cancelar agendamento</button>
-        }
-        <button mat-raised-button mat-dialog-close>Fechar</button>
-      </mat-dialog-actions>
+  <mat-dialog-content align="center">
+    <mat-form-field>
+      <mat-label>Paciente</mat-label>
+      <mat-select formControlName="user">
+        <mat-option *ngFor="let user of usersNamesAndIds" [value]="user.id">{{
+          user.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Selecione uma data</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Selecione o horário</mat-label>
+      <mat-select formControlName="time">
+        <mat-option *ngFor="let time of times" [value]="time">{{
+          time
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    @if(editAppointment){
+    <mat-chip>{{ StatusString }}</mat-chip>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions style="margin-left: auto">
+    @if(isEditing){
+    <button
+      mat-raised-button
+      class="green-button"
+      (click)="completeAppointment()"
+    >
+      Concluir agendamento
+    </button>
+    <button mat-raised-button color="warn" (click)="cancelAppointment()">
+      Cancelar agendamento
+    </button>
+    }
+    <button mat-raised-button type="submit">
+      {{ isEditing ? "Editar" : "Salvar" }}
+    </button>
+    <button mat-raised-button mat-dialog-close>Fechar</button>
+  </mat-dialog-actions>
 </form>
-
-

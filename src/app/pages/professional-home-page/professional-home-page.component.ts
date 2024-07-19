@@ -64,10 +64,7 @@ export class ProfessionalHomePageComponent implements OnInit {
     var _dialog = this.dialog.open(AppointmentDialogProfessionalComponent, {
       width: '60%',
       height: '60%',
-      data: {
-        title: title,
-        id: code
-      }
+      data: code
     });
 
     //posso passar uma função no construtor de AppointmentDialogComponent
