@@ -8,7 +8,7 @@ export const guestGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
 
-  tokenService.isAuthentication.subscribe((val) => {
+  tokenService.isAuthentication$.subscribe((val) => {
     if(val){
       
        tokenService.loggedUser$.subscribe((user) => {

@@ -22,7 +22,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
   loading.show();
   
-  tokenService.isAuthentication.subscribe({
+  tokenService.isAuthentication$.subscribe({
     next: (value) => {
       if (value) {
         req = req.clone({
