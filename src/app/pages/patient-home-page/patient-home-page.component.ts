@@ -37,7 +37,6 @@ export class PatientHomePageComponent implements OnInit {
   loadAppointments(){
     const user = this.tokenService.getLoggedUser()
     if(user){
-      console.log("mandei fazer a requisição");
       this.appointmentService.getAppointmentsByUserId(user.id);
     }
     
@@ -46,7 +45,6 @@ export class PatientHomePageComponent implements OnInit {
 
     this.appointmentService.userAppointments$.subscribe(appointsments => {
       if(appointsments){
-        console.log("pode fazer o L");
         this.appointments = appointsments;
       }
     })
@@ -63,8 +61,6 @@ export class PatientHomePageComponent implements OnInit {
     //pode ser de salvar ou editar
 
     _dialog.afterClosed().subscribe(result => {
-      console.log("printando resultado");
-      console.log(result);
       if(result)
         this.loadAppointments();
 

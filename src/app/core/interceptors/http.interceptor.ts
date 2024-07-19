@@ -25,7 +25,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   tokenService.isAuthentication.subscribe({
     next: (value) => {
       if (value) {
-        console.log("coloquei bearer");
         req = req.clone({
           setHeaders: {
             Authorization: `Bearer ${tokenService.getToken()}`,
@@ -39,7 +38,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
     tap((value) => {
       //notificationService.hideError();
       if (value instanceof HttpResponse) {
-        console.log('instanceof HttpResponse');
         const apiError: ApiError = value.body as ApiError;
         if (apiError.HttpStatus && apiError.HttpStatus !== 200) {
           throw apiError;
@@ -52,7 +50,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
       
       if(error instanceof HttpErrorResponse){
         if(error.status == 401){
-          console.log("deu 401 no primeiro");
           tokenService.removeToken();
           dialog.closeAll();
           router.navigate(['']);
@@ -62,7 +59,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
       // to do: transformar error para o tipo HttpErrorResponse
       if(error.HttpStatus == 401){
 
-        console.log("deu 401 no segundo");
         tokenService.removeToken();
         router.navigate(['']);
       }

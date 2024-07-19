@@ -131,21 +131,19 @@ export class AppointmentDialogProfessionalComponent {
 
   saveAppointment() {
     if (this.appointmentForm.valid) {
-      console.log("entrei no save appointment");
       
           const dateControlValue = this.appointmentForm.controls.date.value;
           if (dateControlValue) {
             const formattedDate = formatDate(dateControlValue, 'yyyy-MM-dd', 'en-US');
 
             if (this.editAppointment) {
-              console.log("vou editar");
               const appoinment: AppointmentUpdateProfessional= {
                 userId: this.appointmentForm.controls.user.value!,
                 appointmentTime: this.appointmentForm.controls.time.value!,
                 appointmentDate: formattedDate,
                 status: this.editAppointment.status
               };
-              console.log(this.editAppointment.id);
+              (this.editAppointment.id);
               this.appointmentService.editAppointmentByProfessional(this.editAppointment.id, appoinment)
               .subscribe((result)=>{
                 this.dialogRef.close(true);
@@ -170,7 +168,6 @@ export class AppointmentDialogProfessionalComponent {
           }
       
     }  else{
-      console.log("nao está valido!")
     }
   }
 
@@ -179,15 +176,12 @@ export class AppointmentDialogProfessionalComponent {
       if (appointment) {
         this.editAppointment = appointment as Appointment;
 
-        console.log("vou preencher com esses valores:");
-        console.log(this.editAppointment);
         if (this.editAppointment && this.editAppointment.userId && this.editAppointment.appointmentTime) {
           this.appointmentForm.patchValue({
             user: this.editAppointment.userId,
             date: new Date(`${appointment.appointmentDate} ${appointment.appointmentTime}`), // Convert string to Date
             time: this.editAppointment.appointmentTime,
           });
-          console.log("preenchi os valores");
         }
       }
     });

@@ -92,14 +92,12 @@ export class AppointmentDialogPatientComponent {
   }
 
   cancelAppointment(){
-    console.log("entrei no cancel appointment");
     this.editAppointment!.status = 3;
     this.saveAppointment();
   }
 
   saveAppointment() {
     if (this.appointmentForm.valid) {
-      console.log("entrei no save appointment");
       
       const user = this.tokenService.getLoggedUser();
       if (user) {
@@ -108,7 +106,6 @@ export class AppointmentDialogPatientComponent {
           const formattedDate = formatDate(dateControlValue, 'yyyy-MM-dd', 'en-US');
 
           if (this.editAppointment) {
-            console.log("vou fazer edição");
             const appoinment: AppointmentUpdatePatient = {
               appointmentTime: this.appointmentForm.controls.time.value!,
               appointmentDate: formattedDate,
@@ -139,7 +136,6 @@ export class AppointmentDialogPatientComponent {
       }
 
     } else{
-      console.log("não está válido!");
     }
   }
 

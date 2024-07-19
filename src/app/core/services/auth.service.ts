@@ -19,7 +19,6 @@ export class AuthService {
   ) {}
 
   onLogin(data: Login) {
-    console.log('entrou no onLogin()');
 
     let params = new HttpParams()
       .set('login', data.login)
@@ -31,8 +30,6 @@ export class AuthService {
       .pipe(
         //aqui pode ser tap
         map((response) => {
-          console.log('printando response');
-          console.log(response.code);
           if (response) {
             this.tokenService.setToken(response.token);
           }
@@ -42,13 +39,10 @@ export class AuthService {
   }
 
   onRegister(data: Register) {
-    console.log("chegando pra registrar")
-    console.log(data);
     return this.http
       .post<RegisterResponse>(`${apiEndpoint.AuthEndpoint.register}`, data)
       .pipe(
         tap((value) => {
-          console.log(value);
           if (value) {
             this.notificationService.showSucess('Usuário criado com sucesso!');
           }

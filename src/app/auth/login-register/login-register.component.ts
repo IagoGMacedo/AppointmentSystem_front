@@ -91,7 +91,6 @@ export class LoginRegisterComponent {
         .onRegister(registerData)
         .subscribe({
           next: () => {
-            console.log('deu bom o cadastro');
             this.registerForm.reset()
             this.changeForm();
           },
@@ -106,7 +105,6 @@ export class LoginRegisterComponent {
   }
 
   changeForm() {
-    console.log(this.showLoginForm);
     this.showLoginForm = !this.showLoginForm;
   }
 }

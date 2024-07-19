@@ -7,13 +7,10 @@ export const roleProfessionalGuard: CanActivateFn = (route, state) => {
   const tokenService = inject(TokenService);
 
   const user : User | null = tokenService.getLoggedUser();
-  console.log("entrei no professional role guard");
-  console.log(user);
   if(user){
     if(user.profile === 'Professional'){
       return true;
     }
   }
-  console.log("deu false");
   return false; 
 };

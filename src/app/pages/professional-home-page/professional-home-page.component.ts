@@ -34,28 +34,17 @@ export class ProfessionalHomePageComponent implements OnInit {
   }
 
   loadAppointments(){
-    /* 
-    this.tokenService.loggedUser$.subscribe((user) => {
-      if(user){
-        console.log("mandei fazer a requisição")
-        this.appointmentService.getAllAppointments();
-      } else{
-      }
-    })
-    */
+    
 
     const user = this.tokenService.getLoggedUser()
     if(user){
-      console.log("mandei fazer a requisição");
       this.appointmentService.getAllAppointments();
     }
 
     this.appointmentService.allAppointments$.subscribe(appointsments => {
       if(appointsments){
-        console.log("pode fazer o L");
         this.appointments = appointsments;
       } else{
-        console.log("ta duro dog");
       }
     })
   }
@@ -71,8 +60,6 @@ export class ProfessionalHomePageComponent implements OnInit {
     //pode ser de salvar ou editar
 
     _dialog.afterClosed().subscribe(result => {
-      console.log("printando resultado");
-      console.log(result);
       if(result)
         this.loadAppointments();
 
