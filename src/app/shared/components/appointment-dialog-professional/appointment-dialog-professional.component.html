@@ -29,22 +29,25 @@
     <mat-chip>{{ StatusString }}</mat-chip>
     }
   </mat-dialog-content>
-  <mat-dialog-actions style="margin-left: auto">
-    @if(isEditing){
-    <button
-      mat-raised-button
-      class="green-button"
-      (click)="completeAppointment()"
-    >
-      Concluir agendamento
-    </button>
-    <button mat-raised-button color="warn" (click)="cancelAppointment()">
-      Cancelar agendamento
-    </button>
-    }
-    <button mat-raised-button type="submit">
+  
+  <mat-dialog-actions [align]="'end'">
+    <button mat-raised-button type="submit" color="primary">
       {{ isEditing ? "Editar" : "Salvar" }}
     </button>
+    @if(isEditing){
+      <button
+        mat-raised-button
+        class="green-button"
+        (click)="completeAppointment()"
+      >
+        Concluir agendamento
+      </button>
+      <button mat-raised-button color="warn" (click)="cancelAppointment()">
+        Cancelar agendamento
+      </button>
+      }
     <button mat-raised-button mat-dialog-close>Fechar</button>
   </mat-dialog-actions>
+  
+  
 </form>

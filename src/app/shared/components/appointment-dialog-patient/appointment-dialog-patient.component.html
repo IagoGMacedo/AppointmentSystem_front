@@ -20,8 +20,8 @@
         }
         
       </mat-dialog-content>
-      <mat-dialog-actions style="margin-left: auto;">
-        <button mat-raised-button>{{ isEditing ? "Editar" : "Salvar" }}</button>
+      <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary">{{ isEditing ? "Editar" : "Salvar" }}</button>
         @if(isEditing){
             <button mat-raised-button color="warn" (click)="cancelAppointment()">Cancelar agendamento</button>
         }
