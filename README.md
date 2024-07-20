@@ -11,7 +11,7 @@ Quando um agendamento é solicitado, o sistema consulta a disponibilidade daquel
 A avaliação de disponibilidade é feita de forma dinâmica, de modo que ao se mudar o dia de um agendamento ou até mesmo cancelando-o, a vaga consumida daquele dia é liberada.
 
 ## Executando
-O projeto divide-se em um front-end feito com angular (este repositório), e um back-end feito com c#, disponível no repositório https://github.com/IagoGMacedo/AppointmentSystem_back. Também é utilizando banco de dado SQL server.
+O projeto divide-se em um front-end feito com angular (este repositório), e um back-end feito com c#, disponível no repositório https://github.com/IagoGMacedo/AppointmentSystem_back. Também é utilizando banco de dados SQL server.
 
 Para inicializar o back-end:
 - crie um novo banco e execute os scripts que estão no readme repositório do back-end
