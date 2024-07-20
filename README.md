@@ -8,7 +8,7 @@ Quanto ao profissional, ele pode visualizar todos os agendamentos criados no sis
 
 Quando um agendamento é solicitado, o sistema consulta a disponibilidade daquela hora e dia. Os horários disponíveis são das 07 às 17, para cada hora há duas vagas de atendimento, dessa forma, em um dia podem ocorrer no máximo 20 atendimentos. Caso o horário solicitado não esteja disponível, uma mensagem aparecerá informando a indisponibilidade.
 
-A avaliação de disponibilidade é feita de forma dinâmica, de modo que ao se mudar o dia de um agendamento ou até mesmo cancelando-o, a vaga consumida daquele dia é liberada.
+A avaliação de disponibilidade é feita de forma dinâmica, de modo que ao mudar a data ou a hora a de um agendamento, ou mesmo o cancelando, a vaga consumida é liberada.
 
 ## Executando
 O projeto divide-se em um front-end feito com angular (este repositório), e um back-end feito com c#, disponível no repositório https://github.com/IagoGMacedo/AppointmentSystem_back. Também é utilizando banco de dados SQL server.
