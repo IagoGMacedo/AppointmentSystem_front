@@ -102,14 +102,10 @@ export class AppointmentDialogPatientComponent {
       
       const user = this.tokenService.getLoggedUser();
       if (user) {
-        const dateControlValue = this.appointmentForm.controls.date.value;
-        if (dateControlValue) {
-          const formattedDate = formatDate(dateControlValue, 'yyyy-MM-dd', 'en-US');
-
           if (this.editAppointment) {
             const appoinment: AppointmentUpdatePatient = {
               appointmentTime: this.appointmentForm.controls.time.value!,
-              appointmentDate: formattedDate,
+              appointmentDate: this.formatedDate,
               status: this.editAppointment.status
             };
             this.appointmentService.editAppointmentByPatient(this.editAppointment.id, appoinment)
@@ -121,9 +117,8 @@ export class AppointmentDialogPatientComponent {
             const appoinment: AppointmentForm = {
               userId: Number(user.id),
               appointmentTime: this.appointmentForm.controls.time.value!,
-              appointmentDate: formattedDate,
+              appointmentDate: this.formatedDate,
             };
-
 
             this.appointmentService
               .createAppointment(appoinment)
@@ -133,7 +128,6 @@ export class AppointmentDialogPatientComponent {
               });
           }
 
-        }
       }
 
     } else{
@@ -150,6 +144,14 @@ export class AppointmentDialogPatientComponent {
         });
       }
     });
+  }
+
+  get formatedDate() : string{
+    return formatDate(
+      this.appointmentForm.controls.date.value!,
+      'yyyy-MM-dd',
+      'en-US'
+    );
   }
 
   get StatusString(): string {

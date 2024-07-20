@@ -33,6 +33,7 @@ import { CommonModule } from '@angular/common';
 import { Appointment, AppointmentUpdateProfessional, StatusMapping } from '../../../core/types/appointmentTypes';
 import { UserNameAndId } from '../../../core/types/userTypes';
 import { AppointmentForm } from '../../../core/types/formTypes';
+import { InputValidationComponent } from "../input-validation/input-validation.component";
 
 @Component({
   selector: 'app-appointment-dialog-professional',
@@ -48,7 +49,8 @@ import { AppointmentForm } from '../../../core/types/formTypes';
     ReactiveFormsModule,
     MatSelectModule,
     MatChipsModule,
-  ],
+    InputValidationComponent
+],
   providers: [
     provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
@@ -99,6 +101,7 @@ export class AppointmentDialogProfessionalComponent {
         this.usersNamesAndIds = users;
       }
     });
+    this.appointmentForm.controls.user.setValue(this.usersNamesAndIds[0].id);
   }
 
   generateTimes() {
@@ -109,6 +112,7 @@ export class AppointmentDialogProfessionalComponent {
       const timeString = hour.toString().padStart(2, '0') + ':00:00';
       this.times.push(timeString);
     }
+
   }
 
   completeAppointment() {
@@ -123,22 +127,14 @@ export class AppointmentDialogProfessionalComponent {
 
   saveAppointment() {
     if (this.appointmentForm.valid) {
-      const dateControlValue = this.appointmentForm.controls.date.value;
-      if (dateControlValue) {
-        const formattedDate = formatDate(
-          dateControlValue,
-          'yyyy-MM-dd',
-          'en-US'
-        );
 
         if (this.editAppointment) {
           const appoinment: AppointmentUpdateProfessional = {
             userId: this.appointmentForm.controls.user.value!,
             appointmentTime: this.appointmentForm.controls.time.value!,
-            appointmentDate: formattedDate,
+            appointmentDate: this.formatedDate,
             status: this.editAppointment.status,
           };
-          this.editAppointment.id;
           this.appointmentService
             .editAppointmentByProfessional(this.editAppointment.id, appoinment)
             .subscribe((result) => {
@@ -151,7 +147,7 @@ export class AppointmentDialogProfessionalComponent {
           const appoinment: AppointmentForm = {
             userId: this.appointmentForm.controls.user.value!,
             appointmentTime: this.appointmentForm.controls.time.value!,
-            appointmentDate: formattedDate,
+            appointmentDate: this.formatedDate,
           };
 
           this.appointmentService
@@ -163,9 +159,7 @@ export class AppointmentDialogProfessionalComponent {
               );
             });
         }
-      }
-    } else {
-    }
+    } 
   }
 
   setAppointmentData(id: number) {
@@ -188,6 +182,14 @@ export class AppointmentDialogProfessionalComponent {
         }
       }
     });
+  }
+
+  get formatedDate() : string{
+    return formatDate(
+      this.appointmentForm.controls.date.value!,
+      'yyyy-MM-dd',
+      'en-US'
+    );
   }
 
   get StatusString(): string {
